@@ -28,7 +28,7 @@ const SimpleSelectRow: React.FC<SimpleSelectRowProps> = (props: SimpleSelectRowP
                         onChange={props.handleChange}
                     >
                         {props.items.map((item: string) => (
-                            <MenuItem value={item}>
+                            <MenuItem key={item} value={item}>
                                 {item}
                             </MenuItem>
                         ))}

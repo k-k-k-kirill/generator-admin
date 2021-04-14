@@ -18,7 +18,7 @@ const Home: React.FC = () => {
         <ThemeProvider theme={theme}>
             <CssBaseline />
             <Layout>
-                <Typography variant="h3" component="h1" gutterBottom>
+                <Typography variant="h4" component="h1" gutterBottom>
                     Submit samples
                 </Typography>
                 <SampleSubmissionForm />
