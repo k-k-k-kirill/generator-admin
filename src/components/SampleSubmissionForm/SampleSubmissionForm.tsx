@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
-import { moodsData, genresData, artistData, tonalitiesData, trackTypeData } from './data';
+import moodsData from './data/moodsData';
+import genresData from './data/genresData';
+import artistData from './data/artistData';
+import tonalitiesData from './data/tonalitiesData';
+import trackTypeData from './data/trackTypeData';
 import { extractLabels } from '../../utils/extractLabels';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
