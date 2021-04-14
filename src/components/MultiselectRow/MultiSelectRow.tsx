@@ -8,14 +8,7 @@ import Paper from '@material-ui/core/Paper';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import { makeStyles } from '@material-ui/core/styles';
-
-interface MultiSelectRowProps {
-    items: string[];
-    handleChange: (event: any) => void;
-    selectedItems: string[];
-    handleDelete: (data: string) => ((event: any) => void) | undefined;
-    label?: string,
-};
+import { MultiSelectRowProps } from './types';
 
 const useStyles = makeStyles((theme) => ({
     formControl: {

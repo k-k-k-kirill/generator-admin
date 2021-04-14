@@ -5,6 +5,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
+import { SimpleSelectRowProps } from './types';
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -13,13 +14,6 @@ const useStyles = makeStyles((theme) => ({
         maxWidth: 300,
     },
 }));
-
-interface SimpleSelectRowProps {
-    items: string[];
-    handleChange: (event: any) => void;
-    selectedItem: string;
-    label?: string;
-};
 
 const SimpleSelectRow: React.FC<SimpleSelectRowProps> = (props: SimpleSelectRowProps) => {
     const classes = useStyles();

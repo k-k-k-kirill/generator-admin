@@ -3,12 +3,7 @@ import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
-
-interface TextFieldRowProps {
-    value: string | number;
-    handleChange: (event: any) => void;
-    label?: string;
-};
+import { TextFieldRowProps } from './types';
 
 const useStyles = makeStyles((theme) => ({
     textField: {
