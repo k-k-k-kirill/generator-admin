@@ -7,13 +7,12 @@ import { TextFieldRowProps } from './types';
 
 const useStyles = makeStyles((theme) => ({
     textField: {
-        minWidth: 120,
-        maxWidth: 300,
+        width: '100%',
+        marginTop: theme.spacing(3),
     },
     formControl: {
         margin: theme.spacing(1),
-        minWidth: 120,
-        maxWidth: 300,
+        width: '100%',
     },
 }));
 
@@ -22,8 +21,8 @@ const TextFieldRow: React.FC<TextFieldRowProps> = (props: TextFieldRowProps) => 
     const classes = useStyles();
 
     return (
-        <Grid container>
-            <Grid item xs={6}>
+        <Grid container spacing={3}>
+            <Grid item xs={3}>
                 <FormControl className={classes.formControl}>
                     <TextField
                         className={classes.textField}

@@ -10,16 +10,15 @@ import { SimpleSelectRowProps } from './types';
 const useStyles = makeStyles((theme) => ({
     formControl: {
         margin: theme.spacing(1),
-        minWidth: 120,
-        maxWidth: 300,
+        width: '100%',
     },
 }));
 
 const SimpleSelectRow: React.FC<SimpleSelectRowProps> = (props: SimpleSelectRowProps) => {
     const classes = useStyles();
     return (
-        <Grid container>
-            <Grid item xs={6}>
+        <Grid container spacing={3}>
+            <Grid item xs={3}>
                 <FormControl className={classes.formControl}>
                     <InputLabel id="simple-select-row">{props.label}</InputLabel>
                     <Select

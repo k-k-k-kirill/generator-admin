@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { moodsData, genresData, artistData, tonalitiesData, trackTypeData } from './data';
 import { extractLabels } from '../../utils/extractLabels';
+import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
+import FormControl from '@material-ui/core/FormControl';
+import { makeStyles } from '@material-ui/core/styles';
 
 //Components
 import MultiSelectRow from '../MultiselectRow/MultiSelectRow';
@@ -8,7 +12,23 @@ import SimpleSelectRow from '../SimpleSelectRow/SimpleSelectRow';
 import TextFieldRow from '../TextFieldRow/TextFieldRow';
 import FileUploadRow from '../FileUploadRow/FileUploadRow';
 
+const useStyles = makeStyles((theme) => ({
+    submitButton: {
+        marginLeft: 'auto',
+    },
+    submitButtonWrapper: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+        padding: theme.spacing(1),
+        marginTop: theme.spacing(4),
+    },
+}));
+
 const SampleSubmissionForm: React.FC = () => {
+    const classes = useStyles();
+
     // Uploads input data
     const [upload, setUpload] = useState<File[]>([]);
 
@@ -105,24 +125,48 @@ const SampleSubmissionForm: React.FC = () => {
         setSelectedTrackType(event.target.value);
     };
 
+    const handleSubmit = (event: any) => {
+        event.preventDefault();
+        console.log('Form submitted!');
+    }
+
     return (
         <>
-            <FileUploadRow item={upload} handleChange={handleUploadChange} handleRemove={handleUploadRemove} label="Upload file" />
+            <form onSubmit={handleSubmit}>
+                <FileUploadRow item={upload} handleChange={handleUploadChange} handleRemove={handleUploadRemove} label="Upload file" />
 
-            <MultiSelectRow label='Moods' handleChange={handleMoodsChange} handleDelete={handleMoodsDelete} selectedItems={selectedMoods} items={selectableMoods} />
-            <MultiSelectRow label='Genres' handleChange={handleGenresChange} handleDelete={handleGenresDelete} selectedItems={selectedGenres} items={selectableGenres} />
+                <MultiSelectRow label='Moods' handleChange={handleMoodsChange} handleDelete={handleMoodsDelete} selectedItems={selectedMoods} items={selectableMoods} />
+                <MultiSelectRow label='Genres' handleChange={handleGenresChange} handleDelete={handleGenresDelete} selectedItems={selectedGenres} items={selectableGenres} />
 
-            {selectableSubgenres.length > 0 ? (
-                <MultiSelectRow label='Subgenres' handleChange={handleSubGenresChange} handleDelete={handleSubGenresDelete} selectedItems={selectedSubGenres} items={selectableSubgenres} />
-            ) : null}
+                {selectableSubgenres.length > 0 ? (
+                    <MultiSelectRow label='Subgenres' handleChange={handleSubGenresChange} handleDelete={handleSubGenresDelete} selectedItems={selectedSubGenres} items={selectableSubgenres} />
+                ) : null}
 
-            <MultiSelectRow label='Artists' handleChange={handleArtistsChange} handleDelete={handleArtistsDelete} selectedItems={selectedArtists} items={selectableArtists} />
+                <MultiSelectRow label='Artists' handleChange={handleArtistsChange} handleDelete={handleArtistsDelete} selectedItems={selectedArtists} items={selectableArtists} />
 
-            <TextFieldRow value={bpm} handleChange={handleBpmChange} label="BPM" />
+                <TextFieldRow value={bpm} handleChange={handleBpmChange} label="BPM" />
 
-            <SimpleSelectRow selectedItem={selectedTonality} handleChange={handleTonalityChange} items={selectableTonalities} label="Tonality" />
+                <SimpleSelectRow selectedItem={selectedTonality} handleChange={handleTonalityChange} items={selectableTonalities} label="Tonality" />
 
-            <SimpleSelectRow selectedItem={selectedTrackType} handleChange={handleTrackTypeChange} items={selectableTrackTypes} label="Track type" />
+                <SimpleSelectRow selectedItem={selectedTrackType} handleChange={handleTrackTypeChange} items={selectableTrackTypes} label="Track type" />
+
+                <Grid container>
+                    <Grid item xs={7}>
+                        <FormControl className={classes.submitButtonWrapper}>
+                            <Button
+                                size="large"
+                                color="primary"
+                                variant="contained"
+                                component="label"
+                                disabled={upload.length === 0}
+                            >
+                                Submit
+                                <input type="submit" hidden />
+                            </Button>
+                        </FormControl>
+                    </Grid>
+                </Grid>
+            </form>
         </>
     )
 };

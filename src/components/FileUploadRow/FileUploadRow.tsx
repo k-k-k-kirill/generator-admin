@@ -13,6 +13,10 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
+    },
+    uploadButtonWrapper: {
+        padding: theme.spacing(1),
+        marginBottom: theme.spacing(4),
     }
 }));
 
@@ -20,10 +24,11 @@ const FileUploadRow: React.FC<FileUploadRowProps> = (props: FileUploadRowProps) 
     const classes = useStyles();
 
     return (
-        <Grid container>
-            <Grid item xs={2}>
+        <Grid container className={classes.uploadButtonWrapper}>
+            <Grid item xs={2} className={classes.upload}>
                 <FormControl>
                     <Button
+                        size="small"
                         variant="contained"
                         component="label"
                         disabled={props.item.length > 0}

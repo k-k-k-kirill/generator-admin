@@ -13,8 +13,7 @@ import { MultiSelectRowProps } from './types';
 const useStyles = makeStyles((theme) => ({
     formControl: {
       margin: theme.spacing(1),
-      minWidth: 120,
-      maxWidth: 300,
+      width: '100%',
     },
     chips: {
       display: 'flex',
@@ -35,7 +34,7 @@ const MultiSelectRow: React.FC<MultiSelectRowProps> = (props: MultiSelectRowProp
 
     return (
         <Grid container spacing={3}>
-            <Grid item xs={6}>
+            <Grid item xs={3}>
                 <FormControl className={classes.formControl}>
                     <InputLabel id="demo-mutiple-name-label">{props.label}</InputLabel>
                     <Select
@@ -54,7 +53,7 @@ const MultiSelectRow: React.FC<MultiSelectRowProps> = (props: MultiSelectRowProp
                     </Select>
                 </FormControl>
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={4}>
                 {props.selectedItems.length > 0 && <Paper component="ul" className={classes.chips}>
                     {props.selectedItems.map((data) => {
                         return (
