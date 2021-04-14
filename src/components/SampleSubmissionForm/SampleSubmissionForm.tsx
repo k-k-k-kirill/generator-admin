@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { moodsData, genresData, artistData, tonalitiesData, trackTypeData } from './data';
 import { extractLabels } from '../../utils/extractLabels';
-import { makeStyles } from '@material-ui/core/styles';
 
 //Components
 import MultiSelectRow from '../MultiselectRow/MultiSelectRow';
