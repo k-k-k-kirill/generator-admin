@@ -4,14 +4,14 @@ import { createSlice } from '@reduxjs/toolkit';
 import moodsData from './data/moodsData';
 import genresData from './data/genresData';
 import artistsData from './data/artistData';
-import tonalitiesData from './data/tonalitiesData';
+import keysData from './data/keysData';
 import trackTypeData from './data/trackTypeData';
 
 const initialState = {
     moods: moodsData,
     genres: genresData,
     artists: artistsData,
-    tonalities: tonalitiesData,
+    keys: keysData,
     trackTypes: trackTypeData,
 }
 

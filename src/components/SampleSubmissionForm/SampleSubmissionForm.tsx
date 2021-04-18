@@ -1,14 +1,8 @@
 import React, { useState } from 'react';
-import moodsData from '../../redux/slices/data/moodsData';
-import genresData from '../../redux/slices/data/genresData';
-import artistData from '../../redux/slices/data/artistData';
-import tonalitiesData from '../../redux/slices/data/tonalitiesData';
-import trackTypeData from '../../redux/slices/data/trackTypeData';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import FormControl from '@material-ui/core/FormControl';
 import { makeStyles } from '@material-ui/core/styles';
-import { ResponseData } from './types';
 
 //Components
 import MultiSelectRow from '../MultiselectRow/MultiSelectRow';
@@ -16,6 +10,24 @@ import SimpleSelectRow from '../SimpleSelectRow/SimpleSelectRow';
 import TextFieldRow from '../TextFieldRow/TextFieldRow';
 import FileUploadRow from '../FileUploadRow/FileUploadRow';
 import GroupedMultiSelectRow from '../GroupedMultiselectRow/GroupedMultiselectRow';
+
+import {
+    addMood,
+    removeMood,
+    addArtist,
+    removeArtist,
+    setBpm,
+    setKey,
+    setTrackType,
+    addGenre,
+    removeGenre,
+    addGenresSubgenresCombination,
+    removeGenresSubgenresCombination,
+    populateSubgenres,
+} from '../../redux/slices/sample/sample';
+
+import { useSelector, useDispatch } from 'react-redux';
+import type { RootState } from '../../redux/store';
 
 const useStyles = makeStyles((theme) => ({
     submitButton: {
@@ -33,6 +45,7 @@ const useStyles = makeStyles((theme) => ({
 
 const SampleSubmissionForm: React.FC = () => {
     const classes = useStyles();
+    const dispatch = useDispatch();
 
     // Uploads input data
     const [upload, setUpload] = useState<File[]>([]);
@@ -45,73 +58,38 @@ const SampleSubmissionForm: React.FC = () => {
     };
 
     // Moods data
-    const [selectedMoods, setSelectedMoods] = useState<any>([]);
-
-    const handleMoodsChange = (event: any) => {      
-        setSelectedMoods(event.target.value)
-    };
-    const handleMoodsDelete = (chipToDelete: string) => () => {
-        setSelectedMoods((chips: any) => chips.filter((chip: any) => chip !== chipToDelete));
-    };
+    const moods = useSelector((state: RootState) => state.sample.moods);
+    const moodsOptions = useSelector((state: RootState) => state.options.moods);
 
     // Genre data
-    const [selectedGenres, setSelectedGenres] = useState<number[]>([]);
+    const genres = useSelector((state: RootState) => state.sample.genres);
+    const genresOptions = useSelector((state: RootState) => state.options.genres);
+    const subgenresOptions = genresOptions.filter((item: any) => !!item.subgenres && genres.find((subItem) => subItem.label === item.label));
+    const genreSubgenreCombinations = useSelector((state: RootState) => state.sample.genresSubgenresCombinations);
 
-    const handleGenresChange = (event: any) => {      
-        setSelectedGenres(event.target.value)
-    };
-
-    const handleGenresDelete = (chipToDelete: string) => () => {
-        setSelectedGenres((chips: any) => chips.filter((chip: any) => chip !== chipToDelete));
-    };
-
-    //Subgenres data
-    const subgenresData = selectedGenres.filter((genreIndex: any) => !!genresData[genreIndex].subgenres).map((genreIndex: number) => genresData[genreIndex]);
-
-    const [selectedSubgenres, setSelectedSubGenres] = useState<string[]>([]);
-
-    const handleSubGenresChange = (event: any) => {
-        setSelectedSubGenres(event.target.value)
-    };
-
-    const handleSubgenresDelete = (chipToDelete: string) => () => {
-        setSelectedSubGenres((chips: any) => chips.filter((chip: any) => chip !== chipToDelete));
-    };
-    // Artists data
-    const [selectedArtists, setSelectedArtists] = useState<string[]>([]);
-
-    const handleArtistsChange = (event: any) => {      
-        setSelectedArtists(event.target.value)
-    };
-    const handleArtistsDelete = (chipToDelete: string) => () => {
-        setSelectedArtists((chips: any) => chips.filter((chip: any) => chip !== chipToDelete));
-    };
-
-    //BPM data
-    const [bpm, setBpm] = useState<number>(0);
-
-    const handleBpmChange = (event: any) => {
-        let { value } = event.target;
-
-        if(value > 999 || value < 0 || isNaN(value)) value = 0;
-
-        value = value ? parseInt(value, 10) : ''
-        setBpm(value);
+    const handleGenresSubgenresCombbinationChange = (item: any) => {
+        dispatch(addGenresSubgenresCombination(item));
+        dispatch(populateSubgenres(item));
+    }
+    const handleGenresSubgenresCombinationDelete = (item: any) => {
+        dispatch(removeGenresSubgenresCombination(item));
+        dispatch(populateSubgenres(item));
     }
 
-    //Tonalities data
-    const [selectedTonality, setSelectedTonality] = useState<number>(-1);
+    // Artists data
+    const artistsOptions = useSelector((state: RootState) => state.options.artists);
+    const artists = useSelector((state: RootState) => state.sample.artists);
 
-    const handleTonalityChange = (event: any) => {
-        setSelectedTonality(event.target.value);
-    };
+    // BPM data
+    const bpm = useSelector((state: RootState) => state.sample.bpm);
 
-    //Track type data
-    const [selectedTrackType, setSelectedTrackType] = useState<number>(-1);
+    // Keys data
+    const key = useSelector((state: RootState) => state.sample.key);
+    const keyOptions = useSelector((state: RootState) => state.options.keys);
 
-    const handleTrackTypeChange = (event: any) => {
-        setSelectedTrackType(event.target.value);
-    };
+    // Track type data
+    const trackType = useSelector((state: RootState) => state.sample.trackType);
+    const trackTypeOptions = useSelector((state: RootState) => state.options.trackTypes);
 
     // Handle submit of the form, prepare data.
     const handleSubmit = (event: any) => {}
@@ -121,21 +99,21 @@ const SampleSubmissionForm: React.FC = () => {
             <form onSubmit={handleSubmit}>
                 <FileUploadRow item={upload} handleChange={handleUploadChange} handleRemove={handleUploadRemove} label="Upload file" />
 
-                <MultiSelectRow label='Moods' handleChange={handleMoodsChange} handleDelete={handleMoodsDelete} selectedItems={selectedMoods} items={moodsData} />
+                <MultiSelectRow label='Moods' handleChange={(e: any) => dispatch(addMood(e.target.value))} handleDelete={(item: any) => dispatch(removeMood(item))} selectedItems={moods} items={moodsOptions} />
 
-                <MultiSelectRow selectedItems={selectedGenres} handleChange={handleGenresChange} handleDelete={handleGenresDelete} items={genresData} label="Genre" />
+                <MultiSelectRow selectedItems={genres} handleChange={(e: any) => dispatch(addGenre(e.target.value))} handleDelete={(item: any) => dispatch(removeGenre(item))} items={genresOptions} label="Genres" />
 
-                {subgenresData.length > 0 ? (
-                    <GroupedMultiSelectRow selectedItems={selectedSubgenres} items={subgenresData} handleChange={handleSubGenresChange} handleDelete={handleSubgenresDelete} label='Subgenres' />
+                {subgenresOptions.length > 0 ? (
+                    <GroupedMultiSelectRow selectedItems={genreSubgenreCombinations} items={subgenresOptions} handleChange={(e: any) => handleGenresSubgenresCombbinationChange(e.target.value)} handleDelete={(item: any) => handleGenresSubgenresCombinationDelete(item)} label='Subgenres' />
                 ) : null}
 
-                <MultiSelectRow label='Artists' handleChange={handleArtistsChange} handleDelete={handleArtistsDelete} selectedItems={selectedArtists} items={artistData} />
+                <MultiSelectRow label='Artists' handleChange={(e: any) => dispatch(addArtist(e.target.value))} handleDelete={(item: any) => dispatch(removeArtist(item))} selectedItems={artists} items={artistsOptions} />
 
-                <TextFieldRow value={bpm} handleChange={handleBpmChange} label="BPM" />
+                <TextFieldRow value={bpm} handleChange={(e) => dispatch(setBpm(e.target.value))} label="BPM" />
 
-                <SimpleSelectRow selectedItem={selectedTonality} handleChange={handleTonalityChange} items={tonalitiesData} label="Key" />
+                <SimpleSelectRow selectedItem={key} handleChange={(e: any) => dispatch(setKey(e.target.value))} items={keyOptions} label="Key" />
 
-                <SimpleSelectRow selectedItem={selectedTrackType} handleChange={handleTrackTypeChange} items={trackTypeData} label="Track type" />
+                <SimpleSelectRow selectedItem={trackType} handleChange={(e: any) => dispatch(setTrackType(e.target.value))} items={trackTypeOptions} label="Track type" />
 
                 <Grid container>
                     <Grid item xs={7}>

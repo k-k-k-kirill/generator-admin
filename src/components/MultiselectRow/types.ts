@@ -1,7 +1,7 @@
 export interface MultiSelectRowProps {
     items: { label: string; value: string; }[];
-    handleChange: (event: any) => void;
+    handleChange: any;
     selectedItems: any[];
-    handleDelete: (data: any) => ((event: any) => void) | undefined;
+    handleDelete: any;
     label?: string,
 };

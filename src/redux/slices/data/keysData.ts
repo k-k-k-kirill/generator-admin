@@ -1,4 +1,4 @@
-const tonalitiesData = [
+const keysData = [
     {
         label: 'C',
         value: 'c',
@@ -117,4 +117,4 @@ const tonalitiesData = [
     },
 ];
 
-export default tonalitiesData;
+export default keysData;

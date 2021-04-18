@@ -10,6 +10,9 @@ import InputLabel from '@material-ui/core/InputLabel';
 import { makeStyles } from '@material-ui/core/styles';
 import ListSubheader from '@material-ui/core/ListSubheader';
 
+// Types
+import type { GroupedMultiSelectRowProps } from './types';
+
 const useStyles = makeStyles((theme) => ({
     formControl: {
       margin: theme.spacing(1),
@@ -27,15 +30,10 @@ const useStyles = makeStyles((theme) => ({
     noLabel: {
       marginTop: theme.spacing(3),
     },
+    listSubHeader: {
+        pointerEvents: 'none',
+    }
 }));
-
-interface GroupedMultiSelectRowProps {
-    items: any[];
-    label?: string;
-    selectedItems: any;
-    handleChange: (event: any) => void;
-    handleDelete: (event: any) => ((event: any) => void) | undefined;
-};
 
 const GroupedMultiSelectRow: React.FC<GroupedMultiSelectRowProps> = (props: GroupedMultiSelectRowProps) => {
     const classes = useStyles();
@@ -52,11 +50,25 @@ const GroupedMultiSelectRow: React.FC<GroupedMultiSelectRowProps> = (props: Grou
                         value={props.selectedItems}
                         onChange={props.handleChange}
                         input={<Input />}
+                        renderValue={(selected: any) => (
+                            <div>
+                                {selected.map((value: any, index: number) => (
+                                    <span key={index}>{index > 0 && ', '} {value.genre} : {value.subgenre.label}</span>
+                                ))}
+                            </div>
+                        )}
                     >
-                        {props.items.map((item: any, genreIndex: number) => {
+                        {props.items.map((item: any) => {
                                 return [
-                                    <ListSubheader>{item.label}</ListSubheader>,
-                                    item.subgenres.map((subgenre: any, subgenreIndex: number) => <MenuItem key={`${genreIndex}-${subgenreIndex}`} value={`${genreIndex}-${subgenreIndex}`}>{subgenre.label}</MenuItem>)
+                                    <ListSubheader className={classes.listSubHeader}>{item.label}</ListSubheader>,
+                                    item.subgenres.map((subgenre: any) => 
+                                    <MenuItem 
+                                        key={subgenre.value} 
+                                        //@ts-ignore
+                                        value={{ genre: item.label, subgenre }}
+                                    >
+                                        {subgenre.label}
+                                    </MenuItem>)
                                 ];
                         })}
                     </Select>
@@ -65,15 +77,11 @@ const GroupedMultiSelectRow: React.FC<GroupedMultiSelectRowProps> = (props: Grou
             <Grid item xs={4}>
                 {props.selectedItems.length > 0 && <Paper component="ul" className={classes.chips}>
                     {props.selectedItems.map((item: any) => {
-                        const indices = item.split('-');
-                        const genre = props.items[parseInt(indices[0])];
-                        const subgenre = genre.subgenres[parseInt(indices[1])];
-
                         return (
-                            <li key={item}>
+                            <li key={item.subgenre.value + item.genre}>
                                 <Chip
-                                    label={`${genre.label} : ${subgenre.label}`}
-                                    onDelete={props.handleDelete(item)}
+                                    label={`${item.genre} : ${item.subgenre.label}`}
+                                    onDelete={() => props.handleDelete(item)}
                                 />
                             </li>
                         );

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import Chip from '@material-ui/core/Chip';
 import Select from '@material-ui/core/Select';
@@ -44,9 +44,20 @@ const MultiSelectRow: React.FC<MultiSelectRowProps> = (props: MultiSelectRowProp
                         value={props.selectedItems}
                         onChange={props.handleChange}
                         input={<Input />}
+                        renderValue={(selected: any) => (
+                            <div>
+                                {selected.map((value: any, index: number) => (
+                                    <span key={index}>{index > 0 && ', '} {value.label}</span>
+                                ))}
+                            </div>
+                        )}
                     >
                         {props.items.map((item, index) => (
-                            <MenuItem key={index} value={index}>
+                            <MenuItem 
+                                key={index} 
+                                // @ts-ignore
+                                value={item}
+                            >
                                 {item.label}
                             </MenuItem>
                         ))}
@@ -55,12 +66,12 @@ const MultiSelectRow: React.FC<MultiSelectRowProps> = (props: MultiSelectRowProp
             </Grid>
             <Grid item xs={4}>
                 {props.selectedItems.length > 0 && <Paper component="ul" className={classes.chips}>
-                    {props.selectedItems.map((item, index) => {
+                    {props.selectedItems.map((item) => {
                         return (
-                            <li key={index}>
+                            <li key={item.value}>
                                 <Chip
-                                    label={props.items[item].label}
-                                    onDelete={props.handleDelete(item)}
+                                    label={item.label}
+                                    onDelete={() => props.handleDelete(item)}
                                 />
                             </li>
                         );
