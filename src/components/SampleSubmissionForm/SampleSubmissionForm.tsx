@@ -1,20 +1,21 @@
 import React, { useState } from 'react';
-import moodsData from './data/moodsData';
-import genresData from './data/genresData';
-import artistData from './data/artistData';
-import tonalitiesData from './data/tonalitiesData';
-import trackTypeData from './data/trackTypeData';
-import { extractLabels } from '../../utils/extractLabels';
+import moodsData from '../../redux/slices/data/moodsData';
+import genresData from '../../redux/slices/data/genresData';
+import artistData from '../../redux/slices/data/artistData';
+import tonalitiesData from '../../redux/slices/data/tonalitiesData';
+import trackTypeData from '../../redux/slices/data/trackTypeData';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import FormControl from '@material-ui/core/FormControl';
 import { makeStyles } from '@material-ui/core/styles';
+import { ResponseData } from './types';
 
 //Components
 import MultiSelectRow from '../MultiselectRow/MultiSelectRow';
 import SimpleSelectRow from '../SimpleSelectRow/SimpleSelectRow';
 import TextFieldRow from '../TextFieldRow/TextFieldRow';
 import FileUploadRow from '../FileUploadRow/FileUploadRow';
+import GroupedMultiSelectRow from '../GroupedMultiselectRow/GroupedMultiselectRow';
 
 const useStyles = makeStyles((theme) => ({
     submitButton: {
@@ -44,61 +45,46 @@ const SampleSubmissionForm: React.FC = () => {
     };
 
     // Moods data
-    const selectableMoods: string[] = extractLabels(moodsData);
-
-    const [selectedMoods, setSelectedMoods] = useState<string[]>([]);
+    const [selectedMoods, setSelectedMoods] = useState<any>([]);
 
     const handleMoodsChange = (event: any) => {      
         setSelectedMoods(event.target.value)
     };
     const handleMoodsDelete = (chipToDelete: string) => () => {
-        setSelectedMoods((chips) => chips.filter((chip) => chip !== chipToDelete));
+        setSelectedMoods((chips: any) => chips.filter((chip: any) => chip !== chipToDelete));
     };
 
-    // Genres data
-    const selectableGenres: string[] = extractLabels(genresData);
-    const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
+    // Genre data
+    const [selectedGenres, setSelectedGenres] = useState<number[]>([]);
 
     const handleGenresChange = (event: any) => {      
         setSelectedGenres(event.target.value)
     };
+
     const handleGenresDelete = (chipToDelete: string) => () => {
-        setSelectedGenres((chips) => chips.filter((chip) => chip !== chipToDelete));
+        setSelectedGenres((chips: any) => chips.filter((chip: any) => chip !== chipToDelete));
     };
 
     //Subgenres data
-    let selectableSubgenres: any[] = [];
-    
-    genresData.map((genre) => {
-        if(selectedGenres.includes(genre.label) && genre.subgenres) {
-            const newSubgenres = genre.subgenres.map((subgenre) => {
-                if (!selectableSubgenres.includes(subgenre.label)) {
-                    return subgenre.label;
-                }
-            });
-            selectableSubgenres = [...selectableSubgenres, ...newSubgenres];
-        }
-    })
+    const subgenresData = selectedGenres.filter((genreIndex: any) => !!genresData[genreIndex].subgenres).map((genreIndex: number) => genresData[genreIndex]);
 
-    const [selectedSubGenres, setSelectedSubGenres] = useState<string[]>([]);
+    const [selectedSubgenres, setSelectedSubGenres] = useState<string[]>([]);
 
-    const handleSubGenresChange = (event: any) => {      
+    const handleSubGenresChange = (event: any) => {
         setSelectedSubGenres(event.target.value)
     };
-    const handleSubGenresDelete = (chipToDelete: string) => () => {
-        setSelectedSubGenres((chips) => chips.filter((chip) => chip !== chipToDelete));
+
+    const handleSubgenresDelete = (chipToDelete: string) => () => {
+        setSelectedSubGenres((chips: any) => chips.filter((chip: any) => chip !== chipToDelete));
     };
-
-    // Genres data
-    const selectableArtists: string[] = extractLabels(artistData);
-
+    // Artists data
     const [selectedArtists, setSelectedArtists] = useState<string[]>([]);
 
     const handleArtistsChange = (event: any) => {      
         setSelectedArtists(event.target.value)
     };
     const handleArtistsDelete = (chipToDelete: string) => () => {
-        setSelectedArtists((chips) => chips.filter((chip) => chip !== chipToDelete));
+        setSelectedArtists((chips: any) => chips.filter((chip: any) => chip !== chipToDelete));
     };
 
     //BPM data
@@ -114,45 +100,42 @@ const SampleSubmissionForm: React.FC = () => {
     }
 
     //Tonalities data
-    const [selectedTonality, setSelectedTonality] = useState<string>('');
-    const selectableTonalities = extractLabels(tonalitiesData);
+    const [selectedTonality, setSelectedTonality] = useState<number>(-1);
 
     const handleTonalityChange = (event: any) => {
         setSelectedTonality(event.target.value);
     };
 
     //Track type data
-    const [selectedTrackType, setSelectedTrackType] = useState<string>('');
-    const selectableTrackTypes = extractLabels(trackTypeData);
+    const [selectedTrackType, setSelectedTrackType] = useState<number>(-1);
 
     const handleTrackTypeChange = (event: any) => {
         setSelectedTrackType(event.target.value);
     };
 
-    const handleSubmit = (event: any) => {
-        event.preventDefault();
-        console.log('Form submitted!');
-    }
+    // Handle submit of the form, prepare data.
+    const handleSubmit = (event: any) => {}
 
     return (
         <>
             <form onSubmit={handleSubmit}>
                 <FileUploadRow item={upload} handleChange={handleUploadChange} handleRemove={handleUploadRemove} label="Upload file" />
 
-                <MultiSelectRow label='Moods' handleChange={handleMoodsChange} handleDelete={handleMoodsDelete} selectedItems={selectedMoods} items={selectableMoods} />
-                <MultiSelectRow label='Genres' handleChange={handleGenresChange} handleDelete={handleGenresDelete} selectedItems={selectedGenres} items={selectableGenres} />
+                <MultiSelectRow label='Moods' handleChange={handleMoodsChange} handleDelete={handleMoodsDelete} selectedItems={selectedMoods} items={moodsData} />
 
-                {selectableSubgenres.length > 0 ? (
-                    <MultiSelectRow label='Subgenres' handleChange={handleSubGenresChange} handleDelete={handleSubGenresDelete} selectedItems={selectedSubGenres} items={selectableSubgenres} />
+                <MultiSelectRow selectedItems={selectedGenres} handleChange={handleGenresChange} handleDelete={handleGenresDelete} items={genresData} label="Genre" />
+
+                {subgenresData.length > 0 ? (
+                    <GroupedMultiSelectRow selectedItems={selectedSubgenres} items={subgenresData} handleChange={handleSubGenresChange} handleDelete={handleSubgenresDelete} label='Subgenres' />
                 ) : null}
 
-                <MultiSelectRow label='Artists' handleChange={handleArtistsChange} handleDelete={handleArtistsDelete} selectedItems={selectedArtists} items={selectableArtists} />
+                <MultiSelectRow label='Artists' handleChange={handleArtistsChange} handleDelete={handleArtistsDelete} selectedItems={selectedArtists} items={artistData} />
 
                 <TextFieldRow value={bpm} handleChange={handleBpmChange} label="BPM" />
 
-                <SimpleSelectRow selectedItem={selectedTonality} handleChange={handleTonalityChange} items={selectableTonalities} label="Tonality" />
+                <SimpleSelectRow selectedItem={selectedTonality} handleChange={handleTonalityChange} items={tonalitiesData} label="Key" />
 
-                <SimpleSelectRow selectedItem={selectedTrackType} handleChange={handleTrackTypeChange} items={selectableTrackTypes} label="Track type" />
+                <SimpleSelectRow selectedItem={selectedTrackType} handleChange={handleTrackTypeChange} items={trackTypeData} label="Track type" />
 
                 <Grid container>
                     <Grid item xs={7}>

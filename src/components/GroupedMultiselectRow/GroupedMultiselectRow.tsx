@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import Chip from '@material-ui/core/Chip';
 import Select from '@material-ui/core/Select';
@@ -8,7 +8,7 @@ import Paper from '@material-ui/core/Paper';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import { makeStyles } from '@material-ui/core/styles';
-import { MultiSelectRowProps } from './types';
+import ListSubheader from '@material-ui/core/ListSubheader';
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -29,7 +29,15 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const MultiSelectRow: React.FC<MultiSelectRowProps> = (props: MultiSelectRowProps) => {
+interface GroupedMultiSelectRowProps {
+    items: any[];
+    label?: string;
+    selectedItems: any;
+    handleChange: (event: any) => void;
+    handleDelete: (event: any) => ((event: any) => void) | undefined;
+};
+
+const GroupedMultiSelectRow: React.FC<GroupedMultiSelectRowProps> = (props: GroupedMultiSelectRowProps) => {
     const classes = useStyles();
 
     return (
@@ -39,27 +47,32 @@ const MultiSelectRow: React.FC<MultiSelectRowProps> = (props: MultiSelectRowProp
                     <InputLabel id="demo-mutiple-name-label">{props.label}</InputLabel>
                     <Select
                         labelId="demo-mutiple-name-label"
-                        id="demo-mutiple-name"
+                        id="demo-mutiple-name-akr"
                         multiple
                         value={props.selectedItems}
                         onChange={props.handleChange}
                         input={<Input />}
                     >
-                        {props.items.map((item, index) => (
-                            <MenuItem key={index} value={index}>
-                                {item.label}
-                            </MenuItem>
-                        ))}
+                        {props.items.map((item: any, genreIndex: number) => {
+                                return [
+                                    <ListSubheader>{item.label}</ListSubheader>,
+                                    item.subgenres.map((subgenre: any, subgenreIndex: number) => <MenuItem key={`${genreIndex}-${subgenreIndex}`} value={`${genreIndex}-${subgenreIndex}`}>{subgenre.label}</MenuItem>)
+                                ];
+                        })}
                     </Select>
                 </FormControl>
             </Grid>
             <Grid item xs={4}>
                 {props.selectedItems.length > 0 && <Paper component="ul" className={classes.chips}>
-                    {props.selectedItems.map((item, index) => {
+                    {props.selectedItems.map((item: any) => {
+                        const indices = item.split('-');
+                        const genre = props.items[parseInt(indices[0])];
+                        const subgenre = genre.subgenres[parseInt(indices[1])];
+
                         return (
-                            <li key={index}>
+                            <li key={item}>
                                 <Chip
-                                    label={props.items[item].label}
+                                    label={`${genre.label} : ${subgenre.label}`}
                                     onDelete={props.handleDelete(item)}
                                 />
                             </li>
@@ -71,4 +84,4 @@ const MultiSelectRow: React.FC<MultiSelectRowProps> = (props: MultiSelectRowProp
     )
 }
 
-export default MultiSelectRow;
+export default GroupedMultiSelectRow;

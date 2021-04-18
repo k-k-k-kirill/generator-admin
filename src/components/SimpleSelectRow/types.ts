@@ -1,6 +1,6 @@
 export interface SimpleSelectRowProps {
-    items: string[];
+    items: any[];
     handleChange: (event: any) => void;
-    selectedItem: string;
+    selectedItem: number;
     label?: string;
 };
