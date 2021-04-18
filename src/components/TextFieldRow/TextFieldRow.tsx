@@ -29,7 +29,6 @@ const TextFieldRow: React.FC<TextFieldRowProps> = (props: TextFieldRowProps) => 
                         label={props.label}
                         value={props.value}
                         onChange={props.handleChange}
-                        defaultValue={0}
                     />
                 </FormControl>
             </Grid>

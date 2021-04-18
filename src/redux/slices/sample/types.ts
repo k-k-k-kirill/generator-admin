@@ -2,8 +2,8 @@ export interface sampleState {
     moods: Tag[];
     artists: Tag[];
     bpm: number;
-    key: Tag | null;
-    trackType: Tag | null;
+    key: Tag | string;
+    trackType: Tag | string;
     genres: Genre[];
     genresSubgenresCombinations: GenreSubgenreCombination[];
 };

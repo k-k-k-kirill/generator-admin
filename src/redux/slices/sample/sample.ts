@@ -10,8 +10,8 @@ const initialState: sampleState = {
     moods: [],
     artists: [],
     bpm: 0,
-    key: null,
-    trackType: null,
+    key: '',
+    trackType: '',
     genres: [],
     genresSubgenresCombinations: [],
 };
