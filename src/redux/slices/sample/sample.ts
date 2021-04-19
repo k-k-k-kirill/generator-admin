@@ -92,6 +92,8 @@ const sampleSlice = createSlice({
 
             return { ...state, genres };
         },
+        uploadSample(){},
+        uploadSampleComplete(){}
     },
 })
 
@@ -108,5 +110,7 @@ export const {
     addGenresSubgenresCombination,
     removeGenresSubgenresCombination,
     populateSubgenres,
+    uploadSample,
+    uploadSampleComplete,
 } = sampleSlice.actions;
 export default sampleSlice.reducer;

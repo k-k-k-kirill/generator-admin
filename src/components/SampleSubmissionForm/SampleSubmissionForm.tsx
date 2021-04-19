@@ -10,7 +10,6 @@ import SimpleSelectRow from '../SimpleSelectRow/SimpleSelectRow';
 import TextFieldRow from '../TextFieldRow/TextFieldRow';
 import FileUploadRow from '../FileUploadRow/FileUploadRow';
 import GroupedMultiSelectRow from '../GroupedMultiselectRow/GroupedMultiselectRow';
-
 import {
     addMood,
     removeMood,
@@ -24,6 +23,7 @@ import {
     addGenresSubgenresCombination,
     removeGenresSubgenresCombination,
     populateSubgenres,
+    uploadSample,
 } from '../../redux/slices/sample/sample';
 
 import { useSelector, useDispatch } from 'react-redux';
@@ -92,7 +92,11 @@ const SampleSubmissionForm: React.FC = () => {
     const trackTypeOptions = useSelector((state: RootState) => state.options.trackTypes);
 
     // Handle submit of the form, prepare data.
-    const handleSubmit = (event: any) => {}
+    const handleSubmit = (event: any) => {
+        event.preventDefault();
+
+        dispatch(uploadSample());
+    }
 
     return (
         <>
