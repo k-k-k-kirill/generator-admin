@@ -16,8 +16,16 @@ const trackTypeData = [
         value: 'lead',
     },
     {
-        label: 'Pad',
-        value: 'pad',
+        label: 'Pads',
+        value: 'pads',
+    },
+    {
+        label: 'Piano',
+        value: 'piano',
+    },
+    {
+        label: 'Synth',
+        value: 'synth',
     },
     {
         label: 'Fx',

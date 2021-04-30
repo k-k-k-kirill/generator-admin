@@ -6,12 +6,17 @@ class Storage {
     constructor() {
         this.instance = axios.create({
             baseURL: "http://localhost:8000",
+            headers: {
+                "Content-Type": "application/json",
+            },
         });
     }
 
-    async post(url: string, data: any) {
+    post = async (url: string, data: any, headers = {}) => {
         try {
-            const response = await this.instance.post(url, data);
+            const response = await this.instance.post(url, data, {
+                headers,
+            });
             return response.data;
         } catch(error) {
             console.log(error);
@@ -20,4 +25,4 @@ class Storage {
     }
 }
 
-export default new Storage();
+export default Storage;

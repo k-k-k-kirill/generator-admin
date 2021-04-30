@@ -8,18 +8,26 @@ const genresData = [
                 value: 'lo_fi',
             },
             {
-                label: 'RnB',
-                value: 'rnb',
+                label: 'Drill',
+                value: 'drill',
+            },
+            {
+                label: 'Old School Trap',
+                value: 'old_school_trap',
+            },
+            {
+                label: 'Guitar Trap',
+                value: 'guitar_trap',
+            },
+            {
+                label: 'Dirty South',
+                value: 'dirty_south',
+            },
+            {
+                label: 'Emo Rap',
+                value: 'emo_rap',
             }
         ]
-    },
-    {
-        label: 'IDM',
-        value: 'idm',
-    },
-    {
-        label: 'UK Drill',
-        value: 'uk_drill',
     },
 ];
 

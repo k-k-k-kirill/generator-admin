@@ -3,6 +3,8 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import FormControl from '@material-ui/core/FormControl';
 import { makeStyles } from '@material-ui/core/styles';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 
 //Components
 import MultiSelectRow from '../MultiselectRow/MultiSelectRow';
@@ -26,6 +28,10 @@ import {
     uploadSample,
 } from '../../redux/slices/sample/sample';
 
+import {
+    clearMessage,
+} from '../../redux/slices/ui/ui';
+
 import { useSelector, useDispatch } from 'react-redux';
 import type { RootState } from '../../redux/store';
 
@@ -43,9 +49,16 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+function Alert(props: any) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
 const SampleSubmissionForm: React.FC = () => {
     const classes = useStyles();
     const dispatch = useDispatch();
+
+    // Notifications data
+    const message = useSelector((state: RootState) => state.ui.message);
 
     // Uploads input data
     const [upload, setUpload] = useState<File[]>([]);
@@ -95,7 +108,7 @@ const SampleSubmissionForm: React.FC = () => {
     const handleSubmit = (event: any) => {
         event.preventDefault();
 
-        dispatch(uploadSample());
+        dispatch(uploadSample(upload[0]));
     }
 
     return (
@@ -113,11 +126,11 @@ const SampleSubmissionForm: React.FC = () => {
 
                 <MultiSelectRow label='Artists' handleChange={(e: any) => dispatch(addArtist(e.target.value))} handleDelete={(item: any) => dispatch(removeArtist(item))} selectedItems={artists} items={artistsOptions} />
 
-                <TextFieldRow value={bpm} handleChange={(e) => dispatch(setBpm(e.target.value))} label="BPM" />
+                <TextFieldRow value={bpm} handleChange={(e) => dispatch(setBpm(e.target.value))} label="BPM*" />
 
-                <SimpleSelectRow selectedItem={key} handleChange={(e: any) => dispatch(setKey(e.target.value))} items={keyOptions} label="Key" />
+                <SimpleSelectRow selectedItem={key} handleChange={(e: any) => dispatch(setKey(e.target.value))} items={keyOptions} label="Key*" />
 
-                <SimpleSelectRow selectedItem={trackType} handleChange={(e: any) => dispatch(setTrackType(e.target.value))} items={trackTypeOptions} label="Track type" />
+                <SimpleSelectRow selectedItem={trackType} handleChange={(e: any) => dispatch(setTrackType(e.target.value))} items={trackTypeOptions} label="Track type*" />
 
                 <Grid container>
                     <Grid item xs={7}>
@@ -136,6 +149,14 @@ const SampleSubmissionForm: React.FC = () => {
                     </Grid>
                 </Grid>
             </form>
+            
+            {message && (
+                <Snackbar open={message !== null} autoHideDuration={6000} onClose={() => dispatch(clearMessage())}>
+                    <Alert onClose={() => dispatch(clearMessage())} severity={message.type}>
+                        {message?.content}
+                    </Alert>
+                </Snackbar>
+            )}
         </>
     )
 };

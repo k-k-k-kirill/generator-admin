@@ -6,10 +6,12 @@ import rootSaga from './sagas';
 //Reducers
 import optionsReducer from './slices/options';
 import sampleDataReducer from './slices/sample/sample';
+import uiReducer from './slices/ui/ui';
 
 const rootReducer = combineReducers({
     options: optionsReducer,
     sample: sampleDataReducer,
+    ui: uiReducer,
 })
 
 const sagaMiddleware = createSagaMiddleware()

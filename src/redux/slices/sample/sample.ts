@@ -92,7 +92,7 @@ const sampleSlice = createSlice({
 
             return { ...state, genres };
         },
-        uploadSample(){},
+        uploadSample(state, upload){},
         uploadSampleComplete(){}
     },
 })

@@ -1,5 +1,9 @@
 const keysData = [
     {
+        label: 'All',
+        value: 'all',
+    },
+    {
         label: 'C',
         value: 'c',
     },
@@ -30,6 +34,10 @@ const keysData = [
     {
         label: 'G',
         value: 'g',
+    },
+    {
+        label: 'G#',
+        value: 'g#',
     },
     {
         label: 'F',
@@ -66,6 +74,10 @@ const keysData = [
     {
         label: 'Hm',
         value: 'hm',
+    },
+    {
+        label: 'G#m',
+        value: 'g#m',
     },
     {
         label: 'F#m',
